@@ -1,5 +1,9 @@
-# Étape 1 — Image de base
 FROM postgres:17.2-alpine
 
-# Étape 3 — Copie des scripts SQL d’initialisation
-COPY ./initdb/ /docker-entrypoint-initdb.d/
+ENV POSTGRES_DB=db \
+    POSTGRES_USER=usr \
+    POSTGRES_PASSWORD=pwd
+
+# Copier les scripts d'initialisation
+COPY initdb/01-CreateScheme.sql /docker-entrypoint-initdb.d/
+COPY initdb/02-InsertData.sql /docker-entrypoint-initdb.d/
