@@ -3,7 +3,7 @@ name: CI devops 2025
 on:
   push:
     branches:
-      - main
+      - maing
       - develop
   pull_request:
 
@@ -25,4 +25,4 @@ jobs:
       # Étape 3 - Builder et tester le projet Maven
       - name: Build and test with Maven
         run: mvn clean verify --file ./backend/simple-api/pom.xml
-# Test trigger CI
+#
