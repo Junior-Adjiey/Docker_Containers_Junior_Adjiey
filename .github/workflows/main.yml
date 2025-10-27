@@ -25,7 +25,8 @@ jobs:
           java-version: '21'
 
       - name: Build and test with Maven
-        run: mvn clean verify --file ./docker_tp/backend/simple-api/pom.xml
+        working-directory: ./docker_tp/backend/simple-api
+        run: mvn clean verify
 
   # ------------------------------------------------
   # 🐳 Build et Push des images Docker (backend + DB + httpd)
@@ -40,8 +41,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
-          --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build and push backend image
         uses: docker/build-push-action@v6
@@ -85,11 +85,11 @@ jobs:
           java-version: '21'
 
       - name: Run SonarQube Analysis
+        working-directory: ./docker_tp/backend/simple-api
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
-          cd docker_tp/backend/simple-api
           mvn sonar:sonar \
             -Dsonar.projectKey=simple-api \
             -Dsonar.host.url=$SONAR_HOST_URL \
