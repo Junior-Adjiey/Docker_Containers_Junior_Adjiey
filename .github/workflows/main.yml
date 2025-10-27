@@ -40,8 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
-          --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build and push backend image
         uses: docker/build-push-action@v6
@@ -68,15 +67,17 @@ jobs:
           push: true
 
   # ------------------------------------------------
-  # 🔍 Analyse SonarQube (Qualité du code)
+  # 🔍 Analyse SonarCloud (Qualité du code)
   # ------------------------------------------------
   sonar-analysis:
-    needs: build-and-push-docker-image   # ✅ Correction ici
+    needs: Build-and-push-docker-image
     runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # important pour SonarCloud
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -84,14 +85,13 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Run SonarQube Analysis
+      - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           cd docker_tp/backend/simple-api
-          mvn sonar:sonar \
-            -Dsonar.projectKey=simple-api \
+          mvn verify sonar:sonar \
+            -Dsonar.projectKey=juniteko_simple-api \
             -Dsonar.organization=juniteko \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
