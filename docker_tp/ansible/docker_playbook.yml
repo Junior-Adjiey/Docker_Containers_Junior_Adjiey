@@ -1,0 +1,42 @@
+- hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+    # Installer les paquets requis
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - python3-venv
+        state: latest
+        update_cache: yes
+
+    # Ajouter la clé GPG Docker
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    # Ajouter le dépôt Docker stable
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
+        state: present
+        update_cache: yes
+
+    # Installer Docker
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    # Vérifier que Docker fonctionne
+    - name: Ensure Docker is running
+      service:
+        name: docker
+        state: started

@@ -1,0 +1,7 @@
+db_user: usr
+db_password: pwd
+db_name: db
+
+spring_datasource_url: jdbc:postgresql://database:5432/db
+spring_datasource_username: "{{ db_user }}"
+spring_datasource_password: "{{ db_password }}"

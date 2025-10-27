@@ -1,0 +1,14 @@
+---
+# tasks file for roles/launch_proxy
+# roles/launch_proxy/tasks/main.yml
+# Lancement du conteneur proxy HTTPD
+
+- name: Launch HTTP proxy container
+  community.docker.docker_container:
+    name: http-proxy
+    image: juniteko/tp-devops-httpd:latest
+    restart_policy: unless-stopped
+    networks:
+      - name: proxy-network
+    published_ports:
+      - "80:80"

@@ -1,0 +1,11 @@
+# roles/create_network/tasks/main.yml
+# Création du réseau Docker pour l’application
+
+- name: Create application network
+  community.docker.docker_network:
+    name: app-network
+    state: present
+
+- name: Create proxy network
+  community.docker.docker_network:
+    name: proxy-network
