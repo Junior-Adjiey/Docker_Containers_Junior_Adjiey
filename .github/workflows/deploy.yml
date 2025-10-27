@@ -28,4 +28,5 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
+          cd docker_tp
           ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
