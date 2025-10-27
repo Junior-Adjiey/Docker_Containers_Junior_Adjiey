@@ -71,26 +71,28 @@ jobs:
   # 🔍 Analyse SonarQube (Qualité du code)
   # ------------------------------------------------
   sonar-analysis:
-    needs: test-backend
-    runs-on: ubuntu-24.04
+  needs: test-backend
+  runs-on: ubuntu-24.04
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # important pour SonarCloud
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
 
-      - name: Run SonarQube Analysis
-        working-directory: ./docker_tp/backend/simple-api
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=simple-api \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.login=$SONAR_TOKEN
+    - name: SonarCloud Scan
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        cd docker_tp/backend/simple-api
+        mvn verify sonar:sonar \
+          -Dsonar.projectKey=simple-api \
+          -Dsonar.organization=juniteko \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
