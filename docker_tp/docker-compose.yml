@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   database:
-    build: ./database
+    image: juniteko/tp-devops-database
     container_name: postgres-db
     environment:
       POSTGRES_DB: db
@@ -14,8 +12,8 @@ services:
       - app-network
 
   backend:
-    image: adjiey/simple-api:1.0
-    container_name: simple-api
+    image: juniteko/tp-devops-simple-api
+    container_name: backend
     depends_on:
       - database
     environment:
@@ -30,7 +28,7 @@ services:
       - "8080:8080"
 
   httpd:
-    build: ./httpd
+    image: juniteko/tp-devops-httpd
     container_name: http-server
     depends_on:
       - backend
