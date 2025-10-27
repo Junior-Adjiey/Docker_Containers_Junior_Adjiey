@@ -91,7 +91,7 @@ jobs:
         run: |
           cd docker_tp/backend/simple-api
           mvn verify sonar:sonar \
-            -Dsonar.projectKey=simple-api \
+            -Dsonar.projectKey=juniteko_simple-api \
             -Dsonar.organization=juniteko \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
