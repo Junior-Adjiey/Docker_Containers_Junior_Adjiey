@@ -7,8 +7,10 @@
   community.docker.docker_container:
     name: http-proxy
     image: juniteko/tp-devops-httpd:latest
-    restart_policy: unless-stopped
+    state: started
+    recreate: yes
+    restart_policy: always
     networks:
-      - name: proxy-network
+      - name: app-network
     published_ports:
       - "80:80"

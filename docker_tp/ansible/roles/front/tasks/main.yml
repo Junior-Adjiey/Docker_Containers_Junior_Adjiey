@@ -1,0 +1,10 @@
+---
+- name: Run front container
+  docker_container:
+    name: front
+    image: juniteko/front:1.2
+    state: started
+    restart_policy: always
+    recreate: yes
+    networks:
+      - name: app-network
