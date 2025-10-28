@@ -1,9 +1,4 @@
-Absolutely 👍 — here’s your **complete, clean, and Markdown-formatted README section** with **all English answers** for the three TPs.
-You can paste it directly into your `README.md`.
-
----
-
-# 🐳 TP 01 – Docker – DevOps
+# TP 01 – Docker – DevOps
 
 ## **1-1. Why is it better to use the `-e` flag for environment variables instead of writing them directly in the Dockerfile?**
 
@@ -152,7 +147,7 @@ Because DockerHub (or any image registry) allows us to:
 
 ---
 
-# ⚙️ TP 02 – GitHub Actions – DevOps
+# TP 02 – GitHub Actions – DevOps
 
 ## **2-1. What are Testcontainers?**
 
@@ -189,7 +184,7 @@ It guarantees that only clean, maintainable, and secure code reaches the main br
 
 ---
 
-# 🤖 TP 03 – Ansible – DevOps
+# TP 03 – Ansible – DevOps
 
 ## **3-1. Document your inventory and base commands**
 
