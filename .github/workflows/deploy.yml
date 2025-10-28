@@ -16,20 +16,27 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y openssh-client ansible
       
-      - name: Setup SSH key
+      - name: Setup SSH key and config
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H koffi-jean-luc-junior.adjiey.takima.cloud >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+          
+          cat > ~/.ssh/config <<EOF
+          Host koffi-jean-luc-junior.adjiey.takima.cloud
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+          EOF
+          chmod 600 ~/.ssh/config
       
       - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           cd docker_tp
           ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
       
       - name: Cleanup SSH key
         if: always()
-        run: rm -f ~/.ssh/id_rsa
+        run: rm -f ~/.ssh/id_rsa ~/.ssh/config
