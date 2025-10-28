@@ -9,6 +9,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -23,8 +25,13 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<Object> getStudents() {
-        System.out.println("🚀 Nouvelle version déployée automatiquement !");
-        return  ResponseEntity.ok(studentService.getAll());
+        System.out.println("🚀 Version 2.0 - CI/CD automatique en action !");
+        // Créer une réponse avec un message visible
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "✅ Déployé automatiquement via GitHub Actions - Version 2.0");
+        response.put("timestamp", java.time.LocalDateTime.now().toString());
+        response.put("students", studentService.getAll());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/{id}")
