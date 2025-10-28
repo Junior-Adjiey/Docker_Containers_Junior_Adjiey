@@ -31,7 +31,7 @@ jobs:
   # 🔍 Analyse SonarCloud (Qualité du code)
   # ------------------------------------------------
   sonar-analysis:
-    needs: test-backend  # ⭐ Après les tests
+    needs: test-backend
     runs-on: ubuntu-24.04
 
     steps:
@@ -61,7 +61,7 @@ jobs:
   # 🐳 Build et Push des images Docker
   # ------------------------------------------------
   build-and-push-docker-image:
-    needs: sonar-analysis  # ⭐ Après SonarCloud
+    needs: sonar-analysis
     runs-on: ubuntu-24.04
     if: github.ref == 'refs/heads/main'
 
@@ -108,7 +108,7 @@ jobs:
   # 🚀 Déploiement avec Ansible
   # ------------------------------------------------
   deploy:
-    needs: build-and-push-docker-image  # ⭐ Après le build
+    needs: build-and-push-docker-image
     runs-on: ubuntu-24.04
     if: github.ref == 'refs/heads/main'
 
@@ -126,6 +126,10 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
+      - name: Add host key to known_hosts
+        run: |
+          ssh-keyscan -H koffi-jean-luc-junior.adjiey.takima.cloud >> ~/.ssh/known_hosts
 
       - name: Deploy with Ansible
         run: |
