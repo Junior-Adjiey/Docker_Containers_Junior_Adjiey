@@ -1,33 +1,35 @@
 name: Deploy with Ansible
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
+      - name: Install SSH client and Ansible
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y openssh-client ansible
+      
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H koffi-jean-luc-junior.adjiey.takima.cloud >> ~/.ssh/known_hosts
-
-      - name: Install Ansible
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ansible
-
+          chmod 644 ~/.ssh/known_hosts
+      
       - name: Run Ansible Playbook
         run: |
           cd docker_tp
           ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
-
+      
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_rsa
