@@ -23,6 +23,7 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<Object> getStudents() {
+        System.out.println("🚀 Nouvelle version déployée automatiquement !");
         return  ResponseEntity.ok(studentService.getAll());
     }
 
