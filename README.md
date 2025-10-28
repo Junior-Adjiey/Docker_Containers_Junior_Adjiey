@@ -263,4 +263,3 @@ To make it safer, we can:
 
 ---
 
-Would you like me to add a short **introduction + summary paragraph** at the top (to make your README more professional)?
